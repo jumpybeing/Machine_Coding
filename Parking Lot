@@ -1,0 +1,130 @@
+import java.util.Scanner;
+
+public class Driver {
+	
+	static Floor floors[]=new Floor[1001];
+	static Vehicle veh[]=new Vehicle[1001];
+	public static void main(String[] args) {
+		
+		Scanner sc=new Scanner(System.in);
+		Implementation impl=new Implementation();
+		
+		int floorNum=sc.nextInt();
+		int i=1;
+		int invalid=0;
+		while(i<=floorNum) {
+			floors[i]=impl.initializeFloors(i);
+			if(floors[i]!=null)
+				i++;
+			else {
+				invalid++;
+				System.out.println("Invalid Initializations!!");
+			}
+			
+			if(invalid>3) {
+				System.out.println("Too many invalid Initializations!!");
+				break;
+			}
+				
+		}
+		
+		boolean loop=true;
+		int id=1;
+		while(loop) {
+			System.out.println("Enter 1 to park a vehcile, 2 to exit the vehicle, 3 to quit!!");
+			int input =sc.nextInt();
+			switch(input) {
+			case 1:
+				Vehicle v=impl.enterVeh(id,floorNum,floors);
+				if(v!=null)
+					{
+						veh[id]=v;
+						id++;
+					}
+				break;
+			case 2:
+				impl.exitVehicle();
+				break;
+			case 3:
+				loop=false;
+				break;
+			}
+		}
+		
+		
+
+	}
+
+}
+
+class Floor{
+	int floorid;
+	int slotnum;
+	Slot slot[];
+	int[] slottype;
+	int mini;
+	int sedan;
+	int suv;
+	public Floor(int floorid,int slotnum,int mini,int sedan,int suv) {
+		this.floorid=floorid;
+		this.slotnum=slotnum;
+		this.slottype=new int[3];
+		this.slottype[0]=mini;
+		this.slottype[1]=sedan;
+		this.slottype[2]=suv;
+		this.mini=mini;
+		this.sedan=sedan;
+		this.suv=suv;
+		this.slot=new Slot[this.slotnum+1];
+		for(int i=1;i<=slotnum;i++) {
+			if(i<=mini)
+			{
+				this.slot[i]=new Slot(i,floorid,Type.MINI);
+			}
+			else if(i<=mini+sedan)
+			{
+				this.slot[i]=new Slot(i,floorid,Type.Sedan);
+			}
+			else
+			{
+				this.slot[i]=new Slot(i,floorid,Type.SUV);
+			}
+		}
+	}
+}
+
+class Slot{
+	int slotid;
+	int floor;
+	Type type;
+	boolean booked;
+	int bookingstart;
+	int bookingend;
+	public Slot(int slotid,int floor,Type type) {
+		this.slotid=slotid;
+		this.floor=floor;
+		this.type=type;
+		this.bookingstart=0;
+		this.bookingend=0;
+		this.booked=false;
+	}
+}
+
+class Vehicle{
+	int vehid;
+	int in;
+	int out;
+	Slot slot;
+	Type type;
+	public Vehicle(int vehid,int in,int out,Type type) {
+		this.vehid=vehid;
+		this.in=in;
+		this.out=out;
+		this.type=type;
+		this.slot=null;
+	}
+}
+
+enum Type{
+	MINI,Sedan,SUV;
+}
