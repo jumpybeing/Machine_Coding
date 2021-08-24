@@ -1,0 +1,102 @@
+import java.util.*;
+public class Driver {
+	static State states[]=new State[1001];
+	static int userid=1;
+	static HashMap<String,Integer> userids=new HashMap<>();
+	static User user[]=new User[1001];
+	public static void main(String[] args) {
+	
+		Implementation impl=new Implementation();
+		
+		impl.onboard(states);
+
+		User u=impl.registerUser(userids,userid);
+		
+		if(u==null) {
+			System.out.println("Already Registered");
+		}
+		else {
+			user[userid]=u;
+			userid++;
+		}
+	
+		String stringuserid="th46785";
+		try {
+			impl.bookVaccine(states,userids,stringuserid,userid,user);
+			
+		} catch(InvalidRegistrationException ex){
+			System.out.println(ex);
+		}
+		
+	}
+
+}
+
+class User{
+	String id;
+	String name;
+	int centerid;
+	int slotid;
+	int in;
+	int out;
+	boolean booked;
+	public User(String name,String id) {
+		this.name=name;
+		this.id=id;
+		this.centerid=-1;
+		this.slotid=-1;
+		this.in=-1;
+		this.out=-1;
+		this.booked=false;
+	}
+	
+}
+
+class State{
+	int cities;
+	City city[];
+	public State(int cities) {
+		this.cities=cities;
+		this.city=new City[cities+1];
+	}
+}
+
+class City{
+	int centers;
+	Center center[];
+	public City(int centers) {
+		this.centers=centers;
+		this.center=new Center[centers+1];
+	}
+}
+class Center{
+	int first;
+	int sec;
+	int third;
+	Slot slot[];
+	public Center(int first,int sec,int third) {
+		this.first=first;
+		this.sec=sec;
+		this.third=third;
+		this.slot=new Slot[3];
+		this.slot[0]=new Slot(8,10,first);
+		this.slot[1]=new Slot(11,1,sec);
+		this.slot[2]=new Slot(2,4,third);
+	}
+}
+class Slot{
+	int in;
+	int out;
+	int numVaccine;
+	public Slot(int in,int out,int numVaccine) {
+		this.in=in;
+		this.out=out;
+		this.numVaccine=numVaccine;
+	}
+}
+
+class InvalidRegistrationException extends Exception{
+	public InvalidRegistrationException(String message) {
+		super(message);
+	}
+}
