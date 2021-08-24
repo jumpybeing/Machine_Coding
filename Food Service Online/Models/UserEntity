@@ -1,0 +1,39 @@
+package models;
+
+import java.util.*;
+
+public class UserEntity {
+		String name;
+		long pincodes;
+		List<Orders> orders;
+		public UserEntity(String name,long pincodes) {
+			this.name=name;
+			this.pincodes=pincodes;
+			this.orders=new ArrayList<>();
+		}
+		
+		public String getName() {
+			return this.name;
+		}
+		
+		public void setName(String name) {
+			this.name=name;
+		}
+		
+		public long getPin() {
+			return this.pincodes;
+		}
+		
+		public void setPin(long pincodes) {
+			this.pincodes=pincodes;
+		}
+		
+		public List<Orders> getOrders() {
+			return this.orders;
+		}
+		
+		public void setOrders(List<Orders> orders) {
+			this.orders=orders;
+		}
+		
+}
