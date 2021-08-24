@@ -1,126 +1,169 @@
 import java.util.*;
-public class Implementation {
+
+public class Driver {
 	
-	Scanner sc=new Scanner(System.in);
+	static CabDriver driver[]=new CabDriver[1001];
+	static User user[]=new User[1001];
 	
-		public void onboard(State states[]) {
-//			int numOfStates=sc.nextInt();
-			int numOfStates=1;
-			for(int i=1;i<=numOfStates;i++) {
-				//int cities=sc.nextInt();
-				int cities=1;
-				states[i]=new State(cities);
-				for(int j=1;j<=cities;j++) {
-					//int centers=sc.nextInt();
-					int centers=1;
-					states[i].city[j]=new City(centers);
-					for(int k=1;k<=centers;k++) {
-//						int first=sc.nextInt();
-//						int sec=sc.nextInt();
-//						int third=sc.nextInt();
-						int first=10;
-						int sec=20;
-						int third=5;
-						states[i].city[j].center[k]=new Center(first,sec,third);
+	public static void main(String[] args) {
+		
+		Scanner sc=new Scanner(System.in);
+		HashMap<String,ArrayList<Integer>> map=new HashMap<>();
+		
+		int NumDriver=3;
+		int cabids=1;
+		for(int i=1;i<=NumDriver;i++) {
+			System.out.println("Enter Cab details to be alloted to the driver !!");
+			System.out.print("Source - ");
+			String src=sc.next();
+			System.out.println();
+			System.out.print("Dest - ");
+			String dest=sc.next();
+			System.out.println();
+			
+			
+			System.out.print("Type - ");
+			Type type;
+			int f=sc.nextInt();
+			if(f==1) {
+				type=Type.AUTO;
+			}
+			else if(f==2) {
+				type=Type.BIKE;
+			}
+			else if(f==3) {
+				type=Type.MINI;
+			}
+			else {
+				System.out.println("Invalid Option!!!");
+				continue;
+			}
+			System.out.println();
+			
+			
+			Cab cab=new Cab(cabids,src,dest,type);
+			if(!map.containsKey(src+"#"+dest))
+			{
+				ArrayList<Integer> a=new ArrayList<Integer>();
+				a.add(i);
+				map.put(src+"#"+dest,new ArrayList<>(a));
+			}
+			else
+			{
+				ArrayList<Integer> a=map.get(src+"#"+dest);
+				a.add(i);
+				map.put(src+"#"+dest,new ArrayList<>(a));
+			}
+			cabids++;
+			System.out.println("Enter Driver name!!");
+			String name=sc.next();
+			driver[i]=new CabDriver(i,cab,name);
+				
+		}
+		
+		Implementation impl=new Implementation();
+		int riders=2;
+		
+		for(int i=1;i<=riders;i++) {
+			user[i]=impl.addUser(i);
+			int driverid=sc.nextInt();
+			System.out.println("Type 1 for taking offered ride or 2 for asking for a ride!!");
+			int askedoroffered=sc.nextInt();
+			
+			if(askedoroffered==1) {
+					int x=impl.offer(driverid,i,driver,user);
+					
+					if(x==1)
+					{
+						System.out.println("Do you want to take the ride offered by "+driver[driverid].name+" ?");
+						System.out.println("Enter 1 for Yes and 0 for No !!");
+						int input=sc.nextInt();
+						if(input==1)
+						{
+							impl.takeride(driverid,i,user);
+						}
 					}
-				}
-			}
 			
-		}
-		
-		public User registerUser(HashMap<String,Integer> userids,int userid) {
-//			String name=sc.next();
-//			String id=sc.next();
-			String name="Aish";
-			String id="th46785";
-			String s="";
-			if(id==null || id.equals(s) || userids.containsKey(id)) {
-				return null;
 			}
 			else {
-				userids.put(id,userid);
-				System.out.println("Registered "+name);
-				return new User(name,id);
-			}
-			
-		}
-		
-		public User registerUserAndBook(HashMap<String,Integer> userids,int userid,String id) {
-			String name="Dev";
-			String s="";
-			if(id==null || id.equals(s) || userids.containsKey(id)) {
-				return null;
-			}
-			else {
-				userids.put(id,userid);
-				System.out.println("Registered "+name);
-				return new User(name,id);
-			}
-		}
-		
-		public void bookVaccine(State states[],HashMap<String,Integer> map,String stringuserid,int userid,User user[]) throws InvalidRegistrationException{
-
-			//String stringuserid=sc.next();
-			int userMappedId=-1;
-
-			if(!map.containsKey(stringuserid)) {
-				User u=registerUserAndBook(map,userid,stringuserid);
-				if(u==null) {
-//					System.out.println("Invalid Registered");
-					throw new InvalidRegistrationException("Invalid Registered");
-//					return;
-				}
-				else {
-					user[userid]=u;
-					userid++;
-				}
-				userMappedId=map.get(stringuserid);
-			}
-			else {
-				userMappedId=map.get(stringuserid);
-			}
-			
-			if(user[userMappedId].booked==true) {
-				System.out.println("Already booked!!");
-				return;
-			}
-			
-//			int stateid=sc.nextInt();
-//			int cityid=sc.nextInt();
-			int stateid=1;
-			int cityid=1;
-			int slot=-1;
-			for(int i=1;i<=states[stateid].city[cityid].centers;i++) {
-				slot=checkAvail(states[stateid].city[cityid].center[i].slot);
-				if(slot!=-1) {
-					user[userMappedId].centerid=i;
-					user[userMappedId].in=states[stateid].city[cityid].center[i].slot[slot].in;
-					user[userMappedId].out=states[stateid].city[cityid].center[i].slot[slot].out;
-					user[userMappedId].booked=true;
-					System.out.println("Booked Successfully for "+user[userMappedId].name);
-				}
-				else {
+				ArrayList<Integer> a=map.get(user[i].src+"#"+user[i].dest);
+				if(a==null) {
 					continue;
 				}
+				else
+				{
+					
+					for(int k=0;k<a.size();k++) {
+						if(driver[a.get(k)].cab.ppl==1)
+						{
+							driver[a.get(k)].cab.ppl--;
+							impl.askforride(a.get(k),i,user);
+							driver[a.get(k)].booked=true;
+							break;
+						}
+					}
+				}
+				
 			}
-			
-			if(slot==-1) {
-				System.out.println("No slots left!!");
-				return;
-			}
+
 		}
 		
-		public int checkAvail(Slot slot[]) {
-				Slot s[]=slot;
-				for(int j=0;j<3;j++) {
-					if(slot[j].numVaccine>0) {
-						slot[j].numVaccine--;
-						return j;
-					}
-					else
-						continue;
-				}
-				return -1;
-			}
+	
+		impl.printStats(user, riders);
 		
+
+	}
+
+}
+
+
+class User{
+	int id;
+	String name;
+	int taken;
+	int offered;
+	String src;
+	String dest;
+	public User(int id,String name,String src,String dest) {
+		this.id=id;
+		this.name=name;
+		this.taken=0;
+		this.offered=0;
+		this.src=src;
+		this.dest=dest;
+	}
+}
+
+class CabDriver{
+	Cab cab;
+	String name;
+	int id;
+	int offered;
+	boolean booked;
+	public CabDriver(int id,Cab cab,String name) {
+		this.cab=cab;
+		this.name=name;
+		this.id=id;
+		this.offered=0;
+		this.booked=false;
+	}
+}
+
+class Cab{
+	int id;
+	String src;
+	String dest;
+	Type type;
+	int ppl;
+	public Cab(int id,String src,String dest,Type type) {
+		this.id=id;
+		this.src=src;
+		this.dest=dest;
+		this.type=type;
+		this.ppl=4;
+	}
+}
+
+enum Type{
+	BIKE,AUTO,MINI;
 }
