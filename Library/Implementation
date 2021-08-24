@@ -1,0 +1,107 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class Implementation {
+		
+	public Library initializeLib(int num) {
+		
+		if(num<=0)
+			return null;
+		
+		Library lib=new Library(num);
+		return lib;
+	}
+	
+	public void initializeBook(int bookid,Book books[],HashMap<String,ArrayList<Integer>> map) {
+		String title="Java";
+		ArrayList<String> auth=new ArrayList<>();
+		auth.add("Aishwarya");
+		ArrayList<String> pub=new ArrayList<>();
+		pub.add("XYZ");
+		int copies=2;
+		int j=copies+bookid;
+		int k=bookid;
+		ArrayList<Integer> list;
+		if(map.containsKey(title)) {
+			list=map.get(title);
+		}
+		else {
+			list=new ArrayList<>();
+		}
+		
+		for(int i=k;i<=j;i++) {
+			books[i]=new Book(i,title,auth,pub,copies);
+			list.add(i);
+			bookid++;
+		}
+		
+		map.put(title,list);
+	}
+	
+	public User initializeUser(String name,int userid) {
+		User u=new User(userid,name); 
+		return u;
+	}
+	
+	public int addBook(int bookid,Book books[],int numOfRacks,Library lib,HashMap<String,ArrayList<Integer>> map) {
+		
+		initializeBook(bookid,books,map);
+		
+		for(int i=1;i<=numOfRacks;i++) {
+			int rackid=checkAvail(lib.rack,i,books,bookid);
+			if(rackid!=-1) {
+				books[bookid].rack=rackid;
+				lib.rack[rackid].bookcopy.add(books[bookid].title);
+				return rackid;
+			}
+			else {
+				continue;
+			}
+		}
+		return -1;
+	}
+	
+	public int checkAvail(Rack rack[],int rackid,Book books[],int bookid) {
+		if(rack[rackid].capacity>0 && rack[rackid].bookcopy.contains(books[bookid].title)==false) {
+			rack[rackid].capacity--;
+			return rackid;
+		}
+		else
+			return -1;
+	}
+	
+	public void lendBook(int userid,User user[],Book book[],HashMap<String,ArrayList<Integer>> map,Library lib) {
+		
+		String name;
+		if(user[userid]==null) {
+			name="Dev";
+			user[userid]=initializeUser(name,userid);
+		}
+		else {
+			name=user[userid].name;
+		}
+		
+		String booktitle="Java";
+		ArrayList<Integer> id=map.get(booktitle);
+		
+		if(id==null) {
+			System.out.println("Book not lent");
+			return ;
+		}
+		
+		for(int i=0;i<id.size();i++) {
+			if(book[id.get(i)].available==true) {
+				book[id.get(i)].available=false;
+				lib.rack[book[id.get(i)].rack].capacity++;
+				lib.rack[book[id.get(i)].rack].bookcopy.remove(book[id.get(i)].title);
+				user[userid].userlist.add(book[id.get(i)]);
+				System.out.println("Book "+booktitle+" has been lent to "+name);
+				return;
+			}
+		}
+		
+		System.out.println("Book not lent");
+		return ;
+		
+	}
+}
