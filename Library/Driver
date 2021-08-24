@@ -1,0 +1,75 @@
+import java.util.*;
+public class Driver {
+	static Book book[]=new Book[1001];
+	static User user[]=new User[1001];
+	static int usersid=1;
+	static int booksid=1;
+	static HashMap<String,ArrayList<Integer>> map=new HashMap<>();
+	public static void main(String[] args) {
+		
+		Implementation impl=new Implementation();
+		int numOfRacks=5;
+		Library lib=impl.initializeLib(numOfRacks);
+		int rackid=impl.addBook(booksid,book,numOfRacks,lib,map);
+		if(rackid!=-1) {
+			book[booksid].rack=rackid;
+		}
+		else {
+			System.out.println("Can't add book");
+		}
+		
+		impl.lendBook(usersid,user,book,map,lib);
+	}
+
+}
+
+class Library{
+	int numOfRacks;
+	Rack rack[];
+	public Library(int numOfRacks) {
+		this.numOfRacks=numOfRacks;
+		rack=new Rack[numOfRacks+1];
+		for(int i=1;i<=numOfRacks;i++) {
+			rack[i]=new Rack(i,10);
+		}
+	}
+}
+class Rack{
+	int id;
+	int capacity;
+	HashSet<String> bookcopy;
+	public Rack(int id,int capacity) {
+		this.id=id;
+		this.capacity=capacity;
+		this.bookcopy=new HashSet<>();
+	}
+}
+class User{
+	int userid;
+	String name;
+	ArrayList<Book> userlist;
+	public User(int userid,String name) {
+		this.userid=userid;
+		this.name=name;
+		userlist=new ArrayList<>();
+	}
+}
+
+class Book{
+	int bookid;
+	String title;
+	int rack;
+	boolean available;
+	int copies;
+	ArrayList<String> authors;
+	ArrayList<String> publishers;
+	public Book(int bookid,String title,ArrayList<String> authors,ArrayList<String> publishers,int copies) {
+		this.bookid=bookid;
+		this.title=title;
+		this.rack=-1;
+		this.authors=authors;
+		this.publishers=publishers;
+		this.copies=copies;
+		this.available=true;
+	}
+}
