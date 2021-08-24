@@ -1,0 +1,46 @@
+package services;
+
+import models.Seller;
+import models.Items;
+import models.Bidder;
+import models.BidItem;
+import models.BidderCategory;
+import java.util.*;
+import java.io.*;
+
+public class Driver {
+
+	public static void main(String[] args) {
+		System.out.println("Execution started");
+		
+		Seller seller1=new Seller("Ram",new ArrayList<Items>());
+		Seller seller2=new Seller("Shyam",new ArrayList<Items>());
+	
+		Items item1=new Items("abc",25);
+		Items item2=new Items("xyz",50);
+		
+		Bidder bidder1=new Bidder("Ramesh",BidderCategory.Regular);
+		Bidder bidder2=new Bidder("Suresh",BidderCategory.Special);
+		Bidder bidder3=new Bidder("Vinesh",BidderCategory.Regular);
+		
+		BidItem p1=new BidItem(bidder1,"abc",40);
+		BidItem p2=new BidItem(bidder2,"xyz",50);
+		BidItem p3=new BidItem(bidder3,"xyz",50);
+		
+		item1.getBidItem().add(p1);
+		item2.getBidItem().add(p2);
+		item2.getBidItem().add(p3);
+			
+		Collections.sort(item1.getBidItem(),new MyComparator());
+		Collections.sort(item2.getBidItem(),new MyComparator());
+		
+		System.out.println("For Item abc bidder is - "+item1.getBidItem().get(0).getBidder().getName());
+		System.out.println("For Item xyz bidder is - "+item2.getBidItem().get(0).getBidder().getName());
+		
+		
+        System.out.println("Execution ended");
+		
+	}
+	
+
+}
