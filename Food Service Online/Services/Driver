@@ -1,0 +1,80 @@
+package services;
+
+import models.*;
+import java.util.*;
+
+public class Driver {
+
+	public static void main(String[] args) {
+		
+		Scanner sc=new Scanner(System.in);
+		int resNum=3;
+		int usersNum=3;
+		
+		HashMap<String,RestaurantEntity> map=new HashMap<>();
+		Register reg=new Register();
+		List<RestaurantEntity> res=new ArrayList<>();
+		for(int i=0;i<resNum;i++) {
+			System.out.println("Enter res name, dish name and price: ");
+			String name=sc.next();
+			String dish=sc.next();
+			int price=sc.nextInt();
+			List<Long> pincodes=new ArrayList<>();
+			pincodes.add((long)474001);
+			pincodes.add((long)474006);
+			RestaurantEntity resentity=reg.registerRestaurant(name,dish,price,pincodes);
+			map.put(name, resentity);
+			res.add(resentity);
+		}
+		
+		for(int i=0;i<res.size();i++) {
+			System.out.println("Res name-"+res.get(i).getName()+" dish name-"+res.get(i).getDish()+" price-"+res.get(i).getPrice());
+		}
+		
+		
+		List<UserEntity> users=new ArrayList<>();
+		for(int i=0;i<usersNum;i++) {
+			System.out.println("Enter user name, and pincode: ");
+			String name=sc.next();
+			long pincodes=sc.nextLong();
+			UserEntity userentity=reg.registerUser(name,pincodes);
+			users.add(userentity);
+		}
+		
+		for(int i=0;i<users.size();i++) {
+			System.out.println("User name-"+users.get(i).getName()+" pincodes-"+users.get(i).getPin());
+		}
+		
+		int orderNum=3;
+		int j=0;
+		for(int i=0;i<orderNum;i++) {
+			UserEntity obj=users.get(j);
+			List<Orders> orderlist=obj.getOrders();
+			System.out.println("Please enter res to order, dish and quantity:");
+			String resName=sc.next();
+			String dish=sc.next();
+			int quantity=sc.nextInt();
+			orderlist.add(new Orders(resName,dish,quantity));
+			obj.setOrders(orderlist);
+		}
+		
+		System.out.println("Please rate us !!");
+		for(int i=0;i<orderNum;i++) {
+			UserEntity obj=users.get(j);
+			List<Orders> orderlist=obj.getOrders();
+			for(int k=0;k<orderlist.size();k++) {
+				double previous=map.get((orderlist).get(k).getName()).getRatings();
+				double rate=sc.nextDouble();
+				previous=(rate+previous)/2;
+				map.get((orderlist).get(k).getName()).setRatings(previous);
+			}
+			j++;
+		}
+		
+		for(int i=0;i<res.size();i++) {
+			System.out.println("Average ratings of "+res.get(i).getName()+" is "+res.get(i).getRatings());
+		}
+
+	}
+
+}
