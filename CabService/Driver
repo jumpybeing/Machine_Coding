@@ -1,0 +1,126 @@
+import java.util.*;
+public class Implementation {
+	
+	Scanner sc=new Scanner(System.in);
+	
+		public void onboard(State states[]) {
+//			int numOfStates=sc.nextInt();
+			int numOfStates=1;
+			for(int i=1;i<=numOfStates;i++) {
+				//int cities=sc.nextInt();
+				int cities=1;
+				states[i]=new State(cities);
+				for(int j=1;j<=cities;j++) {
+					//int centers=sc.nextInt();
+					int centers=1;
+					states[i].city[j]=new City(centers);
+					for(int k=1;k<=centers;k++) {
+//						int first=sc.nextInt();
+//						int sec=sc.nextInt();
+//						int third=sc.nextInt();
+						int first=10;
+						int sec=20;
+						int third=5;
+						states[i].city[j].center[k]=new Center(first,sec,third);
+					}
+				}
+			}
+			
+		}
+		
+		public User registerUser(HashMap<String,Integer> userids,int userid) {
+//			String name=sc.next();
+//			String id=sc.next();
+			String name="Aish";
+			String id="th46785";
+			String s="";
+			if(id==null || id.equals(s) || userids.containsKey(id)) {
+				return null;
+			}
+			else {
+				userids.put(id,userid);
+				System.out.println("Registered "+name);
+				return new User(name,id);
+			}
+			
+		}
+		
+		public User registerUserAndBook(HashMap<String,Integer> userids,int userid,String id) {
+			String name="Dev";
+			String s="";
+			if(id==null || id.equals(s) || userids.containsKey(id)) {
+				return null;
+			}
+			else {
+				userids.put(id,userid);
+				System.out.println("Registered "+name);
+				return new User(name,id);
+			}
+		}
+		
+		public void bookVaccine(State states[],HashMap<String,Integer> map,String stringuserid,int userid,User user[]) throws InvalidRegistrationException{
+
+			//String stringuserid=sc.next();
+			int userMappedId=-1;
+
+			if(!map.containsKey(stringuserid)) {
+				User u=registerUserAndBook(map,userid,stringuserid);
+				if(u==null) {
+//					System.out.println("Invalid Registered");
+					throw new InvalidRegistrationException("Invalid Registered");
+//					return;
+				}
+				else {
+					user[userid]=u;
+					userid++;
+				}
+				userMappedId=map.get(stringuserid);
+			}
+			else {
+				userMappedId=map.get(stringuserid);
+			}
+			
+			if(user[userMappedId].booked==true) {
+				System.out.println("Already booked!!");
+				return;
+			}
+			
+//			int stateid=sc.nextInt();
+//			int cityid=sc.nextInt();
+			int stateid=1;
+			int cityid=1;
+			int slot=-1;
+			for(int i=1;i<=states[stateid].city[cityid].centers;i++) {
+				slot=checkAvail(states[stateid].city[cityid].center[i].slot);
+				if(slot!=-1) {
+					user[userMappedId].centerid=i;
+					user[userMappedId].in=states[stateid].city[cityid].center[i].slot[slot].in;
+					user[userMappedId].out=states[stateid].city[cityid].center[i].slot[slot].out;
+					user[userMappedId].booked=true;
+					System.out.println("Booked Successfully for "+user[userMappedId].name);
+				}
+				else {
+					continue;
+				}
+			}
+			
+			if(slot==-1) {
+				System.out.println("No slots left!!");
+				return;
+			}
+		}
+		
+		public int checkAvail(Slot slot[]) {
+				Slot s[]=slot;
+				for(int j=0;j<3;j++) {
+					if(slot[j].numVaccine>0) {
+						slot[j].numVaccine--;
+						return j;
+					}
+					else
+						continue;
+				}
+				return -1;
+			}
+		
+}
