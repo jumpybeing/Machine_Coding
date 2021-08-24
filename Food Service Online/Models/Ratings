@@ -1,0 +1,28 @@
+package models;
+
+public class Ratings {
+		private double ratings;
+		private String comment;
+		
+		public Ratings(double ratings) {
+			this.ratings=ratings;
+			this.comment=null;
+		}
+		
+		public double getRatings() {
+			return this.ratings;
+		}
+		
+		public void setRatings(double ratings) {
+			this.ratings=ratings;
+		}
+		
+		public String getComment() {
+			return this.comment;
+		}
+		
+		public void setComment(String comment) {
+			this.comment=comment;
+		}
+		
+}
