@@ -1,0 +1,32 @@
+package models;
+
+import java.util.HashMap;
+
+public class Bidder {
+		private String name;
+		private BidderCategory category;
+		
+		public Bidder(String name,BidderCategory category) {
+			this.name=name;
+			this.category=category;
+		}
+		
+		public String getName() {
+			return this.name;
+		}
+		
+		public void setName(String name) {
+			this.name=name;
+		}
+		
+		public BidderCategory getCategory() {
+			return this.category;
+		}
+		
+		public void setCategory(BidderCategory category) {
+			this.category=category;
+		}
+		
+		
+		
+}
