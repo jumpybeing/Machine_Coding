@@ -1,0 +1,44 @@
+
+import java.util.*;
+
+public class Implementation {
+		public User addUser(int id) {
+			Scanner sc=new Scanner(System.in);
+			String name=sc.next();
+			String src=sc.next();
+			String dest=sc.next();
+			User u=new User(id,name,src,dest);
+			
+			return u;
+		}
+		
+		public int offer(int driverid,int userid,CabDriver driver[],User user[]) {
+			CabDriver cd=driver[driverid];
+			User u=user[userid];
+			if(cd.cab.ppl>0 && cd.cab.src.equals(u.src) && cd.cab.dest.equals(u.dest))
+				{
+					u.offered++;
+					cd.offered++;
+					return 1;
+				}
+			return -1;
+		}
+		
+		public int takeride(int driverid,int userid,User user[]) {
+			user[userid].taken++;
+			return 1;
+		}
+		
+		public int askforride(int driverid,int userid,User user[]) {
+			user[userid].taken++;
+			return 1;
+		}
+		
+		public void printStats(User user[],int riders) {
+			for(int i=1;i<=riders;i++) {
+				if(user[i]==null)
+					continue;
+				System.out.println(user[i].name+" boarded from "+user[i].src+" to "+user[i].dest+" and took "+ user[i].taken+" rides and offered "+user[i].offered);
+			}
+		}
+}
