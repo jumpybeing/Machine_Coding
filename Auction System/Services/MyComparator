@@ -1,0 +1,32 @@
+package services;
+
+import models.Seller;
+import models.Items;
+import models.Bidder;
+import models.BidItem;
+import models.BidderCategory;
+import exceptions.BidderPriceAndCategorySameException;
+import java.util.*;
+import java.io.*;
+
+public class MyComparator implements Comparator<BidItem>{
+		public int compare(BidItem p1,BidItem p2){
+			if(p1.getPrice()==p2.getPrice())
+			{
+				if(p1.getBidder().getCategory()==p2.getBidder().getCategory())
+				{
+					return 0;
+				}
+				else
+				{
+					if(p1.getBidder().getCategory()==BidderCategory.Special)
+						return -1;
+					else
+						return 1;
+								
+				}
+			}
+			else
+				return p2.getPrice()-p1.getPrice();
+		}
+}
