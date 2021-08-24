@@ -1,0 +1,85 @@
+import java.util.UUID;
+import java.util.*;
+
+
+
+public class Driver {
+	static Post posts[]=new Post[1001];
+	static Users users[]=new Users[1001];
+	static int postid=1;
+	static int userid=1;
+	public static void main(String[] args) {
+		
+		Scanner sc=new Scanner(System.in);
+		Implement impl=new Implement();
+		
+		System.out.println("Enter Number of users and then users are given userid- ");
+		int usersNum=sc.nextInt();
+		for(int i=1;i<=usersNum;i++) {
+			users[i]=impl.addUser(userid);
+			userid++;
+		}
+		
+		System.out.println("Enter Number of posts and then posts are given userid- ");
+		int postsNum=sc.nextInt();
+		List<Post> rankinglist=new ArrayList<>();
+		for(int i=1;i<=postsNum;i++) {
+			System.out.println("Enter the users who creates the post- ");
+			int userId=sc.nextInt();
+			posts[i]=impl.addPost(postid);
+			rankinglist.add(posts[i]);
+			users[userId].userposts.add(posts[i]);
+			postid++;
+		}
+		
+		System.out.println("Enter Number of likes- ");
+		int likes=sc.nextInt();
+		
+		for(int i=1;i<=likes;i++)
+		{
+			System.out.println("Enter post to be liked- ");
+			int likepost=sc.nextInt();
+			posts[likepost].likes++;
+		}
+		
+		System.out.println("Enter Number of dislikes- ");
+		int dislikes=sc.nextInt();
+		for(int i=1;i<=dislikes;i++) {
+			System.out.println("Enter post to be disliked- ");
+			int dislikepost=sc.nextInt();
+			posts[dislikepost].dislikes++;
+		}
+		
+		Collections.sort(rankinglist,new MyComparator());
+		
+		for(int i=0;i<rankinglist.size();i++) {
+			rankinglist.get(i).ranking=i+1;
+			System.out.println("Post number - "+rankinglist.get(i).id+" has ranking - "+rankinglist.get(i).ranking);
+		}
+		
+
+	}
+
+}
+class Post{
+	int id;
+	int likes;
+	int dislikes;
+	int ranking;
+	public Post(int postid)
+	{
+		this.id=postid;
+		this.likes=0;
+		this.dislikes=0;
+		this.ranking=0;
+	}
+}
+
+class Users{
+	int id;
+	List<Post> userposts;
+	public Users(int userid) {
+		this.id=userid;
+		this.userposts=new ArrayList<>();
+	}
+}
