@@ -1,0 +1,28 @@
+package models;
+
+import java.util.*;
+public class Seller {
+		private String name;
+		private List<Items> items;
+		
+		public Seller(String name,List<Items> items) {
+			this.name=name;
+			this.items=items;
+		}
+		
+		public String getName() {
+			return this.name;
+		}
+		
+		public void setName(String name) {
+			this.name=name;
+		}
+		
+		public List<Items> getSellerItemList(){
+			return this.items;
+		}
+		
+		public void setSellerItemList(List<Items> items) {
+			this.items=items;
+		}
+}
