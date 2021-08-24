@@ -1,0 +1,13 @@
+
+public class Implementation {
+		
+		public Branch addbranch(int pincode) {
+			Branch branch=new Branch(pincode);
+			return branch;
+		}
+		
+		public Vehicle addveh(VehicleType type,int price,int quantity) {
+			Vehicle veh=new Vehicle(type,price,quantity);
+			return veh;
+		}
+}
