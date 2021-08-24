@@ -1,0 +1,52 @@
+package models;
+
+import java.util.List;
+
+public class Orders {
+		String resName;
+		String dish;
+		int quantity;
+		int bill;
+		Ratings ratings;
+		
+		public Orders(String resName, String dish,int quantity) {
+			this.resName=resName;
+			this.dish=dish;
+			this.quantity=quantity;
+			this.bill=0;
+			this.ratings=null;
+		}
+		
+		public String getName() {
+			return this.resName;
+		}
+		
+		public void setName(String resName) {
+			this.resName=resName;
+		}
+		
+		public String getDish() {
+			return this.dish;
+		}
+		
+		public void setDish(String dish) {
+			this.dish=dish;
+		}
+		
+		public int getQuantity() {
+			return this.quantity;
+		}
+		
+		public void setQuantity(int quantity) {
+			this.quantity=quantity;
+		}
+		
+		
+		public Ratings getRatings() {
+			return this.ratings;
+		}
+		
+		public void setRatings(Ratings ratings) {
+			this.ratings=ratings;
+		}
+}
