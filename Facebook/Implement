@@ -1,0 +1,12 @@
+
+public class Implement {
+		public Post addPost(int postid) {
+			Post p=new Post(postid);
+			return p;
+		}
+		
+		public Users addUser(int userid) {
+			Users u=new Users(userid);
+			return u;
+		}
+}
