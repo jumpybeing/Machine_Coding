@@ -1,0 +1,98 @@
+import java.util.*;
+
+public class Implementation {
+	
+	public Floor initializeFloors(int id) {
+		Scanner sc=new Scanner(System.in);
+		int slotnum=sc.nextInt();
+		int mini=sc.nextInt();
+		int sedan=sc.nextInt();
+		int suv=sc.nextInt();
+		
+		if(slotnum<0 || mini<0 || sedan<0 || suv<0 || (mini+sedan+suv)>slotnum) 
+			return null;
+			
+		Floor f=new Floor(id,slotnum,mini,sedan,suv);
+		return f;
+		
+	}
+	
+	public Vehicle enterVeh(int id,int floorNum,Floor floor[]) {
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter in and out time of vehicle!!");
+		int in=sc.nextInt();
+		int out=sc.nextInt();
+		System.out.println("Enter type of vehicle out of MINI, SEDAN and SUV!!");
+		String s=sc.next();
+		Type t=Type.valueOf(s.toUpperCase());
+		Type type;
+		switch(t) {
+		case Sedan:
+			type=Type.Sedan;
+		case SUV:
+			type=Type.SUV;
+		default:
+			type=Type.MINI;
+		}
+		Vehicle v=new Vehicle(id,in,out,type);
+		Slot slot=checkAllFloors(floorNum,floor,v);
+		if(slot==null)
+			return null;
+		v.slot=slot;
+		return v;
+	}
+	
+	public Vehicle exitVehicle() {
+		
+	}
+	
+	public Slot checkAllFloors(int floorNum, Floor floor[],Vehicle veh) {
+		for(int i=1;i<=floorNum;i++) {
+			int slot=checkIfSlotAvail(floor[i],veh);
+			if(slot!=-1) {
+				System.out.println("Vehicle "+veh.vehid+" parked at floor "+i+" and slot "+slot);
+				return floor[i].slot[slot];
+			}
+		}
+		
+		System.out.println("Parking Lot Full!!");
+		return null;
+	}
+	
+		
+	public int checkIfSlotAvail(Floor floor,Vehicle veh) {
+		int t=-1;
+		if(veh.type==Type.MINI)
+			t=0;
+		else if(veh.type==Type.Sedan)
+			t=1;
+		else
+			t=2;
+		
+			int i=-1,j=-1;
+			if(t==1) {
+				i=1;j=floor.mini;
+			}
+			else if(t==2) {
+				i=floor.mini+1;j=floor.mini+floor.sedan;
+			}
+			
+			else {
+				i=floor.mini+floor.sedan+1;j=floor.mini+floor.sedan+floor.suv;
+			}
+				
+			
+			for(;i<=j;i++)
+			{
+				if(floor.slot[i].booked==false || (floor.slot[i].booked==true && floor.slot[i].bookingend<=veh.in)) {
+					floor.slot[i].booked=true;
+					floor.slot[i].bookingstart=veh.in;
+					floor.slot[i].bookingend=veh.out;
+					return i;
+				}
+			}
+			
+			return -1;
+		}
+	
+}
